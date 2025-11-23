@@ -69,11 +69,11 @@ function FeaturedRestaurants() {
                 </button>
               </div>
               
-              <div className="aspect-square mb-4 flex items-center justify-center rounded-2xl overflow-hidden">
+              <div className="aspect-square mb-4 bg-gray-50 rounded-2xl overflow-hidden relative">
                 <img 
                   src={item.image} 
                   alt={item.name} 
-                  className="w-full h-full object-cover drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover block drop-shadow-md group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
               

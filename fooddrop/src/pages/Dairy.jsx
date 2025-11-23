@@ -7,8 +7,8 @@ function Dairy() {
     { id: 3, name: "Greek Yogurt", weight: "500g", price: 3.49, image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=500&q=80" },
     { id: 4, name: "Butter", weight: "250g", price: 3.99, image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?auto=format&fit=crop&w=500&q=80" },
     { id: 5, name: "Eggs", weight: "12pcs", price: 4.49, image: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=500&q=80" },
-    { id: 6, name: "Cream", weight: "250ml", price: 2.49, image: "https://images.unsplash.com/photo-1626139576127-452a1325244c?auto=format&fit=crop&w=500&q=80" },
-    { id: 7, name: "Mozzarella", weight: "250g", price: 5.49, image: "https://images.unsplash.com/photo-1574156814151-2d28f8a70358?auto=format&fit=crop&w=500&q=80" },
+    { id: 6, name: "Cream", weight: "250ml", price: 2.49, image: "https://images.unsplash.com/photo-1628155176021-721043637f05?auto=format&fit=crop&w=800&q=80" },
+    { id: 7, name: "Mozzarella", weight: "250g", price: 5.49, image: "https://images.unsplash.com/photo-1531290188777-c6c9599e446d?auto=format&fit=crop&w=800&q=80" },
     { id: 8, name: "Almond Milk", weight: "1L", price: 3.99, image: "https://images.unsplash.com/photo-1600788886242-5c96aabe3757?auto=format&fit=crop&w=500&q=80" },
   ];
 

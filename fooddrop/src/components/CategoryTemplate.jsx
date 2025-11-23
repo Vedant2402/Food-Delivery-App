@@ -1,7 +1,9 @@
 import Navbar from './Navbar';
 import BottomNav from './BottomNav';
+import { useNavigate } from 'react-router-dom';
 
 function CategoryTemplate({ title, items }) {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-bg pb-20 md:pb-0">
       <Navbar />
@@ -13,7 +15,20 @@ function CategoryTemplate({ title, items }) {
           <span className="text-text-main font-medium">{title}</span>
         </div>
 
-        <h1 className="text-3xl font-bold text-text-main mb-8">{title}</h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-text-main">{title}</h1>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 text-text-main text-sm font-medium hover:bg-gray-200 transition-colors"
+            aria-label="Go back"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back
+          </button>
+        </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {items.map((item) => (
@@ -26,11 +41,11 @@ function CategoryTemplate({ title, items }) {
                 </button>
               </div>
               
-              <div className="aspect-square mb-4 flex items-center justify-center bg-gray-50 rounded-2xl overflow-hidden">
+              <div className="aspect-square mb-4 bg-gray-50 rounded-2xl overflow-hidden relative">
                 <img 
                   src={item.image} 
                   alt={item.name} 
-                  className="w-full h-full object-cover drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover block drop-shadow-md group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
               
