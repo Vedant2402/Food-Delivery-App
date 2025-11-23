@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function Navbar() {
 
   return (
@@ -29,18 +31,18 @@ function Navbar() {
 
           {/* Desktop Navigation (Hidden on Mobile) */}
           <div className="hidden md:flex items-center gap-8">
-            <a
-              href="#"
+            <Link
+              to="/"
               className="text-text-main hover:text-primary font-medium transition-colors"
             >
               Home
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/category/vegetables"
               className="text-text-main hover:text-primary font-medium transition-colors"
             >
               Categories
-            </a>
+            </Link>
             <a
               href="#"
               className="text-text-main hover:text-primary font-medium transition-colors"

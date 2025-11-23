@@ -61,7 +61,7 @@ function FeaturedRestaurants() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {items.map((item) => (
             <div key={item.id} className={`rounded-3xl p-4 ${item.color} border border-gray-100 card-hover group relative`}>
-              <div className="absolute top-3 right-3">
+              <div className="absolute top-3 right-3 z-10">
                 <button className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm text-gray-400 hover:text-red-500 transition-colors">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -69,11 +69,11 @@ function FeaturedRestaurants() {
                 </button>
               </div>
               
-              <div className="aspect-square mb-4 flex items-center justify-center">
+              <div className="aspect-square mb-4 flex items-center justify-center rounded-2xl overflow-hidden">
                 <img 
                   src={item.image} 
                   alt={item.name} 
-                  className="w-full h-full object-contain drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                  className="w-full h-full object-cover drop-shadow-md group-hover:scale-110 transition-transform duration-300"
                 />
               </div>
               
