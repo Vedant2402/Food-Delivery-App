@@ -26,6 +26,16 @@
   }
 }
 
+/* Route transition animation */
+.route-fade {
+  animation: routeFade 320ms ease;
+}
+
+@keyframes routeFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Custom Scrollbar for horizontal lists */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;

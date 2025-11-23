@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 function CategoryTemplate({ title, items }) {
   const navigate = useNavigate();
+  const fallbackImg = 'https://via.placeholder.com/400?text=Image+Unavailable';
   return (
     <div className="min-h-screen bg-bg pb-20 md:pb-0">
       <Navbar />
@@ -42,9 +43,11 @@ function CategoryTemplate({ title, items }) {
               </div>
               
               <div className="aspect-square mb-4 bg-gray-50 rounded-2xl overflow-hidden relative">
-                <img 
-                  src={item.image} 
-                  alt={item.name} 
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  loading="lazy"
+                  onError={(e) => { if (e.currentTarget.src !== fallbackImg) e.currentTarget.src = fallbackImg; }}
                   className="w-full h-full object-cover block drop-shadow-md group-hover:scale-110 transition-transform duration-300"
                 />
               </div>

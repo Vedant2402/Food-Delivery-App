@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Homepage from './Homepage';
 import Vegetables from './pages/Vegetables';
 import Fruits from './pages/Fruits';
@@ -9,10 +9,11 @@ import Drinks from './pages/Drinks';
 import Snacks from './pages/Snacks';
 import Frozen from './pages/Frozen';
 
-function App() {
+function AnimatedRoutes() {
+  const location = useLocation();
   return (
-    <Router>
-      <Routes>
+    <div key={location.pathname} className="route-fade">
+      <Routes location={location}>
         <Route path="/" element={<Homepage />} />
         <Route path="/category/vegetables" element={<Vegetables />} />
         <Route path="/category/fruits" element={<Fruits />} />
@@ -23,6 +24,14 @@ function App() {
         <Route path="/category/snacks" element={<Snacks />} />
         <Route path="/category/frozen" element={<Frozen />} />
       </Routes>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AnimatedRoutes />
     </Router>
   );
 }

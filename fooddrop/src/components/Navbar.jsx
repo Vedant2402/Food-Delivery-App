@@ -1,6 +1,77 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+// Simple postal code lookup (India PIN or fallback) using public API.
+async function lookupPin(pin) {
+  if (!pin || pin.length < 4) return null;
+  try {
+    // Try India postal API if looks like Indian PIN (6 digits)
+    if (/^\d{6}$/.test(pin)) {
+      const res = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
+      const data = await res.json();
+      if (Array.isArray(data) && data[0].Status === 'Success') {
+        const po = data[0].PostOffice?.[0];
+        if (po) {
+          return { city: po.District, state: po.State, country: 'India' };
+        }
+      }
+    }
+    // Fallback: US ZIP via Zippopotam (if 5 digits)
+    if (/^\d{5}$/.test(pin)) {
+      const res = await fetch(`https://api.zippopotam.us/us/${pin}`);
+      if (res.ok) {
+        const data = await res.json();
+        const place = data.places?.[0];
+        if (place) {
+          return { city: place['place name'], state: place['state abbreviation'], country: data.country };
+        }
+      }
+    }
+    return null;
+  } catch { return null; }
+}
 
 function Navbar() {
+  const [showPanel, setShowPanel] = useState(false);
+  const [pin, setPin] = useState(() => localStorage.getItem('delivery_pin') || '');
+  const [location, setLocation] = useState(() => {
+    const raw = localStorage.getItem('delivery_location');
+    return raw ? JSON.parse(raw) : null;
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleLookup = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    const info = await lookupPin(pin.trim());
+    setLoading(false);
+    if (!info) {
+      setError('Could not resolve location');
+      return;
+    }
+    setLocation(info);
+    localStorage.setItem('delivery_pin', pin.trim());
+    localStorage.setItem('delivery_location', JSON.stringify(info));
+    setShowPanel(false);
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      if (pin && !location) {
+        const info = await lookupPin(pin.trim());
+        if (info && !cancelled) {
+          setLocation(info);
+          localStorage.setItem('delivery_location', JSON.stringify(info));
+        }
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [pin, location]);
+
+  const displayText = location ? `${location.city}, ${location.state}` : 'Set Location';
 
   return (
     <nav className="sticky top-0 z-50 bg-bg/80 backdrop-blur-md border-b border-gray-100">
@@ -11,22 +82,52 @@ function Navbar() {
             <span className="text-[10px] text-text-muted font-medium uppercase tracking-wider">
               Delivering to
             </span>
-            <div className="flex items-center gap-1 text-primary font-bold cursor-pointer group">
-              <span>Los Angeles, CA</span>
+            <button
+              type="button"
+              onClick={() => setShowPanel(s => !s)}
+              className="flex items-center gap-1 text-primary font-bold cursor-pointer group"
+            >
+              <span>{displayText}</span>
               <svg
                 className="w-4 h-4 transition-transform group-hover:rotate-180"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M19 9l-7 7-7-7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
-            </div>
+            </button>
+            {showPanel && (
+              <div className="absolute mt-14 w-64 p-4 rounded-xl bg-white shadow-lg border border-gray-100 z-50">
+                <form onSubmit={handleLookup} className="flex flex-col gap-3">
+                  <label className="text-xs font-medium text-text-muted">Enter Pincode / ZIP</label>
+                  <input
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value)}
+                    placeholder="e.g. 560001"
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                  />
+                  {error && <div className="text-xs text-red-600">{error}</div>}
+                  <div className="flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => setShowPanel(false)}
+                      className="text-xs px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-text-main"
+                    >Cancel</button>
+                    <button
+                      type="submit"
+                      disabled={loading || !pin}
+                      className="text-xs px-3 py-2 rounded-lg bg-primary text-white font-semibold disabled:opacity-50"
+                    >{loading ? 'Lookup…' : 'Save'}</button>
+                  </div>
+                  {location && (
+                    <div className="text-[11px] bg-gray-50 p-2 rounded-lg text-text-muted">
+                      Detected: <span className="font-medium text-text-main">{location.city}, {location.state} {location.country}</span>
+                    </div>
+                  )}
+                </form>
+              </div>
+            )}
           </div>
 
           {/* Desktop Navigation (Hidden on Mobile) */}
